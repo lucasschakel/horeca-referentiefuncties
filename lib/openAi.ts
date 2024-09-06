@@ -1,5 +1,5 @@
-export async function callOpenAIAssistant(message: string): Promise<string> {
-    if (process.env.NEXT_PUBLIC_USE_MOCK_API === 'true') {
+export async function callOpenAIAssistant(message: string, signal?: AbortSignal): Promise<string> {
+  if (process.env.NEXT_PUBLIC_USE_MOCK_API === 'true') {
       // Mock API call
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate delay
       return `This is a mock response for the message: "${message}"`;
@@ -12,6 +12,7 @@ export async function callOpenAIAssistant(message: string): Promise<string> {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ message }),
+          signal,
         });
   
         if (!response.ok) {

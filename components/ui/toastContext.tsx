@@ -26,7 +26,7 @@ export const ToastProvider: React.FC<React.PropsWithChildren> = ({ children }) =
 
     setTimeout(() => {
       setToasts((currentToasts) => currentToasts.filter((t) => t.id !== id));
-    }, 3000);
+    }, 2500);
   }, []);
 
   return (

@@ -7,19 +7,13 @@ import { Input } from "@/components/ui/input"
 import { ToastProvider, useToast } from "@/components/ui/toastContext"
 import { ToastContainer } from "@/components/ui/toastContainer"
 import { callOpenAIAssistant } from "@/lib/openAi"
+import { translations } from '@/locales/translations'
 import '@/app/globals.css'
 
 interface Message {
   role: 'user' | 'assistant'
   content: string
 }
-
-const exampleQuestions = [
-  "Wat zijn de belangrijkste taken van een zelfstandig werkend kok?",
-  "Welke vaardigheden heeft een restaurantmanager nodig?",
-  "Wat is het verschil tussen een barista en een bartender?",
-  "Hoe ziet de carrièreladder in de horeca eruit?"
-]
 
 function HorecaReferentiefunctiesChat() {
   const [messages, setMessages] = useState<Message[]>([])
@@ -28,6 +22,7 @@ function HorecaReferentiefunctiesChat() {
   const { toast } = useToast()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [language, setLanguage] = useState('nl')
+  const [cancelToken, setCancelToken] = useState<AbortController | null>(null);
 
   useEffect(() => {
     const link = document.createElement('link')
@@ -44,48 +39,63 @@ function HorecaReferentiefunctiesChat() {
   }, [messages, isThinking])
 
   useEffect(() => {
-    const browserLang = navigator.language.toLowerCase()
-    setLanguage(browserLang.startsWith('nl') ? 'nl' : 'en')
-  }, [])
-
+    const savedLanguage = localStorage.getItem('language') || 'nl';
+    setLanguage(savedLanguage);
+  }, []);
+  
   const handleLanguageChange = () => {
-    setLanguage(prevLang => prevLang === 'nl' ? 'en' : 'nl')
-    // You can add your translation logic here in the future
-  }
+    const newLanguage = language === 'nl' ? 'en' : 'nl';
+    setLanguage(newLanguage);
+    localStorage.setItem('language', newLanguage);
+  };
 
   const handleRefresh = () => {
+    if (cancelToken) {
+      cancelToken.abort();
+    }
     setMessages([])
+    setIsThinking(false)
+    setInputMessage('')
   }
-
   const handleSendMessage = async (message: string) => {
     if (!message.trim()) return
-
+  
     const userMessage: Message = { role: 'user', content: message }
     setMessages(prev => [...prev, userMessage])
     setInputMessage('')
     setIsThinking(true)
-
+  
+    const abortController = new AbortController();
+    setCancelToken(abortController);
+  
     try {
-      const response = await callOpenAIAssistant(message)
+      const response = await callOpenAIAssistant(message, abortController.signal)
       const assistantMessage: Message = { role: 'assistant', content: response }
       setMessages(prev => [...prev, assistantMessage])
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to get response from the assistant.",
-        variant: "destructive",
-      })
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'AbortError') {
+        // Request was aborted, do nothing
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to get a response.",
+          variant: "destructive",
+        })
+      }
     } finally {
       setIsThinking(false)
+      setCancelToken(null)
     }
   }
+
+  const t = translations[language as keyof typeof translations]
 
   return (
     <div className="flex flex-col h-screen bg-white">
       <header className="bg-white shadow-sm py-1 md:py-2 sticky top-0 z-10">
         <div className="mx-auto px-4 flex justify-between items-center">
           <h1 className="text-lg md:text-2xl font-semibold" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
-            Horeca Referentiefuncties
+            {t.title}
           </h1>
           <div className="flex items-center space-x-2">
             {messages.length > 0 && (
@@ -120,10 +130,10 @@ function HorecaReferentiefunctiesChat() {
             <div className="h-full flex items-center justify-center">
               <div className="space-y-6">
                 <p className="text-center text-muted-foreground">
-                  Start een gesprek door een vraag te selecteren of je eigen vraag te typen.
+                  {t.startPrompt}
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-2 gap-2">
-                  {exampleQuestions.map((question, index) => (
+                  {t.exampleQuestions.map((question, index) => (
                     <Button
                       key={index}
                       variant="outline"
@@ -165,7 +175,7 @@ function HorecaReferentiefunctiesChat() {
                 </div>
                 <div className="mx-2 p-3 rounded-2xl bg-[#E7E1DE] animate-pulse">
                   <span className="inline-flex items-center">
-                    Thinking
+                    {t.thinking}
                     <span className="ml-1">
                       <span className="thinking-dot">.</span>
                       <span className="thinking-dot">.</span>
@@ -190,7 +200,7 @@ function HorecaReferentiefunctiesChat() {
               onKeyDown={(e) => e.key === 'Enter' && handleSendMessage(inputMessage)}
             />
             <Button onClick={() => handleSendMessage(inputMessage)} className="w-10 sm:w-auto">
-              Verstuur
+              {t.sendButton}
             </Button>
           </div>
           <div className="flex items-center justify-center space-x-1 text-sm text-muted-foreground">
@@ -200,7 +210,7 @@ function HorecaReferentiefunctiesChat() {
               rel="noopener noreferrer"
               className="flex items-center space-x-1 hover:opacity-80 transition-opacity"
             >
-              <span>Powered by</span>
+              <span>{t.poweredBy}</span>
               <svg width="55" height="18" viewBox="0 0 55 18" className="inline-block">
                 <image href="/soigne.svg" width="55" height="18" />
               </svg>
