@@ -18,10 +18,15 @@ export function ToastContainer() {
           toast.visible ? { ...toast, visible: false } : toast
         )
       )
-    }, 2700)  // Start fade-out slightly before the toast is removed
-
+    }, 2700)
+    
     return () => clearTimeout(timer)
   }, [visibleToasts])
+
+  // If there are no visible toasts, don't render anything
+  if (visibleToasts.length === 0) {
+    return null;
+  }
 
   return (
     <>
@@ -35,7 +40,7 @@ export function ToastContainer() {
         }
       `}</style>
       <div className="fixed bottom-0 left-0 right-0 flex justify-center items-end p-4 z-50">
-        <div className="space-y-2 max-w-md">
+        <div className="space-y-2 max-w-md mb-16">
           {visibleToasts.map((toast) => (
             <div
               key={toast.id}

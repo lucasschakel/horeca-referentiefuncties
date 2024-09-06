@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
@@ -81,29 +82,33 @@ function HorecaReferentiefunctiesChat() {
 
   return (
     <div className="flex flex-col h-screen bg-white">
-      <header className="bg-white shadow-sm py-3 md:py-4 sticky top-0 z-10">
+      <header className="bg-white shadow-sm py-1 md:py-2 sticky top-0 z-10">
         <div className="mx-auto px-4 flex justify-between items-center">
-          <h1 className="text-xl md:text-2xl font-semibold" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
+          <h1 className="text-lg md:text-2xl font-semibold" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
             Horeca Referentiefuncties
           </h1>
           <div className="flex items-center space-x-2">
             {messages.length > 0 && (
               <button 
-                className="p-1 rounded-full hover:bg-gray-100" 
+                className="p-2.5 rounded-full hover:bg-gray-100" 
                 aria-label="Refresh Chat"
                 onClick={handleRefresh}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="gray" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/>
                 </svg>
               </button>
             )}
             <button 
-              className="p-1 rounded-full hover:bg-gray-100 text-2xl"
+              className="p-2 rounded-full hover:bg-gray-100"
               aria-label={`Switch to ${language === 'nl' ? 'English' : 'Dutch'}`}
               onClick={handleLanguageChange}
             >
-              {language === 'nl' ? '🇬🇧' : '🇳🇱'}
+              <img 
+                src={language === 'nl' ? '/flag-uk.svg' : '/flag-nl.svg'} 
+                alt={language === 'nl' ? 'Switch to English' : 'Switch to Dutch'}
+                className="w-6 h-6"
+              />
             </button>
           </div>
         </div>
@@ -123,7 +128,7 @@ function HorecaReferentiefunctiesChat() {
                       key={index}
                       variant="outline"
                       onClick={() => handleSendMessage(question)}
-                      className={`text-left h-auto whitespace-normal ${index === 3 ? 'hidden sm:block' : ''}`}
+                      className={`text-left h-auto whitespace-normal ${index === 3 ? 'hidden md:block' : ''}`}
                       noIcon={true}
                     >
                       {question}
@@ -143,7 +148,7 @@ function HorecaReferentiefunctiesChat() {
                       </svg>
                     </div>
                   )}
-                  <div className={`px-4 py-2 md:py-3 my-1 md:my-2 rounded-xl text-sm ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-[#E7E1DE]'}`}>
+                  <div className={`px-4 py-2 md:py-2.5 my-0.5 md:my-1 rounded-xl text-sm ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-[#E7E1DE]'}`}>
                     {message.content}
                   </div>
                 </div>
@@ -175,11 +180,11 @@ function HorecaReferentiefunctiesChat() {
         </div>
       </main>
 
-      <footer className="bg-white shadow-md py-4 sticky bottom-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 flex flex-col space-y-4">
+      <footer className="bg-white shadow-md py-3 md:py-4 sticky bottom-0 z-10">
+        <div className="max-w-2xl mx-auto px-4 flex flex-col space-y-3 md:space-y-4">
           <div className="flex items-center space-x-2">
             <Input
-              placeholder="Typ je bericht..."
+              placeholder={messages.length === 0 ? "Stel je vraag" : "Typ je bericht"}
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSendMessage(inputMessage)}
