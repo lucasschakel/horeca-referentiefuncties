@@ -1,101 +1,217 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import { useState, useEffect, useRef } from 'react'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { ToastProvider, useToast } from "@/components/ui/toastContext"
+import { ToastContainer } from "@/components/ui/toastContainer"
+import { callOpenAIAssistant } from "@/lib/openAi"
+import '@/app/globals.css'
+
+interface Message {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+const exampleQuestions = [
+  "Wat zijn de belangrijkste taken van een zelfstandig werkend kok?",
+  "Welke vaardigheden heeft een restaurantmanager nodig?",
+  "Wat is het verschil tussen een barista en een bartender?",
+  "Hoe ziet de carrièreladder in de horeca eruit?"
+]
+
+function HorecaReferentiefunctiesChat() {
+  const [messages, setMessages] = useState<Message[]>([])
+  const [inputMessage, setInputMessage] = useState('')
+  const [isThinking, setIsThinking] = useState(false)
+  const { toast } = useToast()
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [language, setLanguage] = useState('nl')
+
+  useEffect(() => {
+    const link = document.createElement('link')
+    link.href = 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;700&display=swap'
+    link.rel = 'stylesheet'
+    document.head.appendChild(link)
+    return () => {
+      document.head.removeChild(link)
+    }
+  }, [])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages, isThinking])
+
+  useEffect(() => {
+    const browserLang = navigator.language.toLowerCase()
+    setLanguage(browserLang.startsWith('nl') ? 'nl' : 'en')
+  }, [])
+
+  const handleLanguageChange = () => {
+    setLanguage(prevLang => prevLang === 'nl' ? 'en' : 'nl')
+    // You can add your translation logic here in the future
+  }
+
+  const handleRefresh = () => {
+    setMessages([])
+  }
+
+  const handleSendMessage = async (message: string) => {
+    if (!message.trim()) return
+
+    const userMessage: Message = { role: 'user', content: message }
+    setMessages(prev => [...prev, userMessage])
+    setInputMessage('')
+    setIsThinking(true)
+
+    try {
+      const response = await callOpenAIAssistant(message)
+      const assistantMessage: Message = { role: 'assistant', content: response }
+      setMessages(prev => [...prev, assistantMessage])
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to get response from the assistant.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsThinking(false)
+    }
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="flex flex-col h-screen bg-white">
+      <header className="bg-white shadow-sm py-3 md:py-4 sticky top-0 z-10">
+        <div className="mx-auto px-4 flex justify-between items-center">
+          <h1 className="text-xl md:text-2xl font-semibold" style={{ fontFamily: "'Bricolage Grotesque', sans-serif" }}>
+            Horeca Referentiefuncties
+          </h1>
+          <div className="flex items-center space-x-2">
+            {messages.length > 0 && (
+              <button 
+                className="p-1 rounded-full hover:bg-gray-100" 
+                aria-label="Refresh Chat"
+                onClick={handleRefresh}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/>
+                </svg>
+              </button>
+            )}
+            <button 
+              className="p-1 rounded-full hover:bg-gray-100 text-2xl"
+              aria-label={`Switch to ${language === 'nl' ? 'English' : 'Dutch'}`}
+              onClick={handleLanguageChange}
+            >
+              {language === 'nl' ? '🇬🇧' : '🇳🇱'}
+            </button>
+          </div>
+        </div>
+      </header>
+      
+      <main className="flex-grow overflow-y-auto">
+        <div className="max-w-2xl mx-auto h-full px-4 py-8">
+          {messages.length === 0 ? (
+            <div className="h-full flex items-center justify-center">
+              <div className="space-y-6">
+                <p className="text-center text-muted-foreground">
+                  Start een gesprek door een vraag te selecteren of je eigen vraag te typen.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-2 gap-2">
+                  {exampleQuestions.map((question, index) => (
+                    <Button
+                      key={index}
+                      variant="outline"
+                      onClick={() => handleSendMessage(question)}
+                      className={`text-left h-auto whitespace-normal ${index === 3 ? 'hidden sm:block' : ''}`}
+                      noIcon={true}
+                    >
+                      {question}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            messages.map((message, index) => (
+              <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} mb-2`}>
+                <div className={`flex items-start max-w-[80%] ${message.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                  {message.role === 'assistant' && (
+                    <div className="w-6 h-6 mr-2 rounded-full overflow-hidden flex-shrink-0">
+                      <svg viewBox="0 0 12 12" className="w-full h-full">
+                        <image href="/Soigne-e.svg" width="12" height="12" />
+                      </svg>
+                    </div>
+                  )}
+                  <div className={`px-4 py-2 md:py-3 my-1 md:my-2 rounded-xl text-sm ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-[#E7E1DE]'}`}>
+                    {message.content}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+          {isThinking && (
+            <div className="flex justify-start mb-4">
+              <div className="flex items-start max-w-[80%]">
+                <div className="w-6 h-6 mr-2 rounded-full overflow-hidden flex-shrink-0">
+                  <svg viewBox="0 0 12 12" className="w-full h-full">
+                    <image href="/Soigne-e.svg" width="12" height="12" />
+                  </svg>
+                </div>
+                <div className="mx-2 p-3 rounded-2xl bg-[#E7E1DE] animate-pulse">
+                  <span className="inline-flex items-center">
+                    Thinking
+                    <span className="ml-1">
+                      <span className="thinking-dot">.</span>
+                      <span className="thinking-dot">.</span>
+                      <span className="thinking-dot">.</span>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="bg-white shadow-md py-4 sticky bottom-0 z-10">
+        <div className="max-w-2xl mx-auto px-4 flex flex-col space-y-4">
+          <div className="flex items-center space-x-2">
+            <Input
+              placeholder="Typ je bericht..."
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage(inputMessage)}
+            />
+            <Button onClick={() => handleSendMessage(inputMessage)} className="w-10 sm:w-auto">
+              Verstuur
+            </Button>
+          </div>
+          <div className="flex items-center justify-center space-x-1 text-sm text-muted-foreground">
+            <a 
+              href="https://soigne.app/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center space-x-1 hover:opacity-80 transition-opacity"
+            >
+              <span>Powered by</span>
+              <svg width="55" height="18" viewBox="0 0 55 18" className="inline-block">
+                <image href="/soigne.svg" width="55" height="18" />
+              </svg>
+            </a>
+          </div>
+        </div>
       </footer>
     </div>
-  );
+  )
+}
+
+export default function Page() {
+  return (
+    <ToastProvider>
+      <ToastContainer />
+      <HorecaReferentiefunctiesChat />
+    </ToastProvider>
+  )
 }
