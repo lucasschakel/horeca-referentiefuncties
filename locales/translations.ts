@@ -1,9 +1,11 @@
+// locales/translations.ts
+
 export const translations = {
     nl: {
       title: "Horeca Referentiefuncties",
       startPrompt: "Start een gesprek door een vraag te selecteren of je eigen vraag te typen.",
-      inputPlaceholder: "Stel je vraag",
-      inputPlaceholderContinue: "Typ je bericht",
+      inputPlaceholderInitial: "Stel je vraag",
+      inputPlaceholderOngoing: "Typ je bericht",
       sendButton: "Verstuur",
       thinking: "Denken",
       poweredBy: "Powered by",
@@ -18,8 +20,8 @@ export const translations = {
     en: {
       title: "Hospitality Reference Functions",
       startPrompt: "Start a conversation by selecting a question or typing your own.",
-      inputPlaceholder: "Ask your question",
-      inputPlaceholderContinue: "Type your message",
+      inputPlaceholderInitial: "Ask your question",
+      inputPlaceholderOngoing: "Type your message",
       sendButton: "Send",
       thinking: "Thinking",
       poweredBy: "Powered by",

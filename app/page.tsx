@@ -194,7 +194,7 @@ function HorecaReferentiefunctiesChat() {
         <div className="max-w-2xl mx-auto px-4 flex flex-col space-y-3 md:space-y-4">
           <div className="flex items-center space-x-2">
             <Input
-              placeholder={messages.length === 0 ? "Stel je vraag" : "Typ je bericht"}
+              placeholder={messages.length === 0 ? t.inputPlaceholderInitial : t.inputPlaceholderOngoing}
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSendMessage(inputMessage)}
