@@ -111,7 +111,7 @@ function HorecaReferentiefunctiesChat() {
       
       <main className="flex-grow overflow-hidden flex flex-col">
         <div className="flex-grow overflow-y-auto">
-          <div className="max-w-2xl mx-auto px-4 pt-2 md:pt-8 pb-8 min-h-full flex flex-col">
+          <div className="max-w-2xl mx-auto px-4 pt-2 pb-8 min-h-full flex flex-col">
             {messages.length === 0 ? (
               <div className="flex-grow flex items-center justify-center">
                 <div className="space-y-6">
