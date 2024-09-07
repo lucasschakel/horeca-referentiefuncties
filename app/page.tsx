@@ -11,6 +11,7 @@ import MessageBubble from '@/components/ui/MessageBubble'
 import ThinkingAnimation from '@/components/ui/ThinkingAnimation'
 import Footer from '@/components/ui/Footer'
 import Header from '@/components/ui/Header'
+import Image from 'next/image'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -127,6 +128,16 @@ function HorecaReferentiefunctiesChat() {
             {messages.length === 0 ? (
               <div className="flex-grow flex items-center justify-center">
                 <div className="space-y-6">
+                  <div className="flex justify-center">
+                    <div className="w-[40px] h-[40px] relative">
+                      <Image
+                        src="/soigne-e.svg"
+                        alt="Soigne Logo"
+                        layout="fill"
+                        objectFit="contain"
+                      />
+                    </div>
+                  </div>
                   <p className="text-center text-muted-foreground">
                     {t.startPrompt}
                   </p>
