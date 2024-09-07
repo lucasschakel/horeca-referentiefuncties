@@ -3,7 +3,7 @@
 import '@/app/globals.css'
 import { useState, useEffect, useRef } from 'react'
 import { ToastProvider, useToast } from "@/components/ToastContext"
-import { ToastContainer } from '@/components/ui/ToastContainer'
+import { ToastContainer } from "@/components/ui/ToastContainer"
 import { callOpenAIAssistant } from "@/lib/openAi"
 import { translations } from '@/locales/translations'
 import { ExampleQuestion } from '@/components/ui/ExampleQuestion'
