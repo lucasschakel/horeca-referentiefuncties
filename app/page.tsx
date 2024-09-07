@@ -132,7 +132,7 @@ function HorecaReferentiefunctiesChat() {
                     <div className="flex justify-center mb-4">
                       <div className="w-[40px] h-[40px] relative">
                         <Image
-                          src="/soigne-e.svg"
+                          src="/Soigne-e.svg"
                           alt="Soigne Logo"
                           layout="fill"
                           objectFit="contain"
