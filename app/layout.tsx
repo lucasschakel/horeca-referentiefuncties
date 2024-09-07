@@ -5,8 +5,8 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Horeca Referentiefuncties Chat',
-  description: 'Chat about Horeca reference functions',
+  title: 'Horeca.ai',
+  description: 'Ask all your questions about the horeca cao, reference functions and pay scales.',
 }
 
 export default function RootLayout({

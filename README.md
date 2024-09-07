@@ -1,4 +1,4 @@
-# Horeca Referentiefuncties Chat
+# Horeca.ai
 
 This is a Next.js 14 application with TypeScript that provides a chat interface for discussing Horeca (Hotel/Restaurant/Café) reference functions. It uses the OpenAI Assistant API to generate responses.
 

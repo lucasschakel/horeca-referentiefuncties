@@ -23,6 +23,7 @@ function HorecaReferentiefunctiesChat() {
   const [isThinking, setIsThinking] = useState(false)
   const { toast } = useToast()
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   const [language, setLanguage] = useState('nl')
   const [cancelToken, setCancelToken] = useState<AbortController | null>(null);
 
@@ -35,6 +36,17 @@ function HorecaReferentiefunctiesChat() {
       document.head.removeChild(link)
     }
   }, [])
+
+  useEffect(() => {
+    const isMobileDevice = () => {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    };
+
+    // Focus the input only if it's not a mobile device
+    if (!isMobileDevice() && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     const scrollToBottom = () => {
@@ -145,6 +157,7 @@ function HorecaReferentiefunctiesChat() {
       </main>
 
       <Footer 
+        inputRef={inputRef}
         inputMessage={inputMessage}
         onInputChange={(e) => setInputMessage(e.target.value)}
         onSendMessage={() => handleSendMessage(inputMessage)}

@@ -1,7 +1,7 @@
 export const translations = {
     nl: {
       title: "Horeca.ai",
-      startPrompt: "Deze AI is getraind op de horeca cao, referentiefuncties en loonschalen. Je kunt bijvoorbeeld vragen...",
+      startPrompt: "Deze AI is getraind op de horeca cao, referentiefuncties en loonschalen en geeft direct antwoord op vragen als...",
       inputPlaceholderInitial: "Stel je vraag",
       inputPlaceholderOngoing: "Typ je bericht",
       sendButton: "Verstuur",
@@ -17,7 +17,7 @@ export const translations = {
     },
     en: {
       title: "Horeca.ai",
-      startPrompt: "This AI is trained on the horeca cao, reference jobs and pay scales. For example, you can ask...",
+      startPrompt: "This AI is trained on the horeca cao, reference jobs and pay scales and provides direct answers to questions such as...",
       inputPlaceholderInitial: "Ask your question",
       inputPlaceholderOngoing: "Type your message",
       sendButton: "Send",

@@ -1,6 +1,8 @@
-import { InputWithButton } from "@/components/ui/InputWithButton"
+import React from 'react'
+import { InputWithButton } from '@/components/ui/InputWithButton'
 
 interface FooterProps {
+  inputRef: React.RefObject<HTMLInputElement>;
   inputMessage: string;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSendMessage: () => void;
@@ -9,6 +11,7 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({ 
+  inputRef,
   inputMessage, 
   onInputChange, 
   onSendMessage, 
@@ -19,6 +22,7 @@ const Footer: React.FC<FooterProps> = ({
     <footer className="bg-white shadow-md pb-3 pt-0 sticky bottom-0 z-10">
       <div className="max-w-2xl mx-auto px-4 flex flex-col space-y-3">
         <InputWithButton
+          ref={inputRef}
           value={inputMessage}
           onChange={onInputChange}
           onKeyDown={(e) => e.key === 'Enter' && onSendMessage()}
