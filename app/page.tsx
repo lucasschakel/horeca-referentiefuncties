@@ -141,7 +141,7 @@ function HorecaReferentiefunctiesChat() {
                   <p className="text-center text-muted-foreground">
                     {t.startPrompt}
                   </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-2 gap-3">
                     {t.exampleQuestions.map((question, index) => (
                       <ExampleQuestion
                         key={index}
