@@ -1,13 +1,11 @@
-// locales/translations.ts
-
 export const translations = {
     nl: {
-      title: "Horeca Referentiefuncties",
-      startPrompt: "Start een gesprek door een vraag te selecteren of je eigen vraag te typen.",
+      title: "Horeca.ai",
+      startPrompt: "Deze AI is getraind op de horeca cao, referentiefuncties en loonschalen. Je kunt bijvoorbeeld vragen...",
       inputPlaceholderInitial: "Stel je vraag",
       inputPlaceholderOngoing: "Typ je bericht",
       sendButton: "Verstuur",
-      thinking: "Denken",
+      thinking: "Aan het denken",
       poweredBy: "Powered by",
       refreshChat: "Vernieuw gesprek",
       exampleQuestions: [
@@ -18,8 +16,8 @@ export const translations = {
       ]
     },
     en: {
-      title: "Hospitality Reference Functions",
-      startPrompt: "Start a conversation by selecting a question or typing your own.",
+      title: "Horeca.ai",
+      startPrompt: "This AI is trained on the horeca cao, reference jobs and pay scales. For example, you can ask...",
       inputPlaceholderInitial: "Ask your question",
       inputPlaceholderOngoing: "Type your message",
       sendButton: "Send",
