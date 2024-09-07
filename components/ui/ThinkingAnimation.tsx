@@ -1,17 +1,19 @@
 interface ThinkingAnimationProps {
-  thinkingText: string;
+  thinkingText: string
 }
 
-const ThinkingAnimation: React.FC<ThinkingAnimationProps> = ({ thinkingText }) => {
+const ThinkingAnimation: React.FC<ThinkingAnimationProps> = ({
+  thinkingText,
+}) => {
   return (
-    <div className="flex justify-start mb-4">
-      <div className="flex items-start max-w-[70%]">
-        <div className="w-6 h-6 mr-2 rounded-full overflow-hidden flex-shrink-0">
-          <svg viewBox="0 0 12 12" className="w-full h-full">
+    <div className="mb-4 flex justify-start">
+      <div className="flex max-w-[70%] items-start">
+        <div className="mr-2 h-6 w-6 flex-shrink-0 overflow-hidden rounded-full">
+          <svg viewBox="0 0 12 12" className="h-full w-full">
             <image href="/Soigne-e.svg" width="12" height="12" />
           </svg>
         </div>
-        <div className="mx-2 p-3 rounded-2xl bg-[#E7E1DE] animate-pulse">
+        <div className="mx-2 animate-pulse rounded-2xl bg-[#E7E1DE] p-3">
           <span className="inline-flex items-center">
             {thinkingText}
             <span className="ml-1">
@@ -23,7 +25,7 @@ const ThinkingAnimation: React.FC<ThinkingAnimationProps> = ({ thinkingText }) =
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ThinkingAnimation;
+export default ThinkingAnimation

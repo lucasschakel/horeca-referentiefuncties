@@ -6,7 +6,8 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Horeca.ai',
-  description: 'Ask all your questions about the horeca cao, reference functions and pay scales.',
+  description:
+    'Ask all your questions about the horeca cao, reference functions and pay scales.',
 }
 
 export default function RootLayout({
