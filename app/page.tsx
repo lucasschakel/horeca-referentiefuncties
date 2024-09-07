@@ -122,47 +122,49 @@ function HorecaReferentiefunctiesChat() {
         showRefresh={messages.length > 0}
       />
       
-      <main className="flex-grow overflow-hidden flex flex-col">
-        <div className="flex-grow overflow-y-auto">
-          <div className="max-w-2xl mx-auto px-4 pt-2 pb-8 min-h-full flex flex-col">
-            {messages.length === 0 ? (
-              <div className="flex-grow flex items-center justify-center">
-                <div className="space-y-6">
-                  <div className="flex justify-center">
-                    <div className="w-[40px] h-[40px] relative">
-                      <Image
-                        src="/soigne-e.svg"
-                        alt="Soigne Logo"
-                        layout="fill"
-                        objectFit="contain"
-                      />
+      <main className="relative flex h-full w-full overflow-hidden transition-colors flex-1 flex-col">
+        <div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden">
+          <div className="flex-1 overflow-hidden">
+            <div className="h-full overflow-y-auto">
+              <div className="flex flex-col items-center justify-start h-full text-sm">
+                {messages.length === 0 ? (
+                  <div className="w-full md:max-w-2xl lg:max-w-3xl px-4 py-8 flex flex-col items-center justify-center h-full">
+                    <div className="flex justify-center mb-4">
+                      <div className="w-[40px] h-[40px] relative">
+                        <Image
+                          src="/soigne-e.svg"
+                          alt="Soigne Logo"
+                          layout="fill"
+                          objectFit="contain"
+                        />
+                      </div>
+                    </div>
+                    <p className="text-center text-muted-foreground mb-6">
+                      {t.startPrompt}
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-2 gap-3 w-full">
+                      {t.exampleQuestions.map((question, index) => (
+                        <ExampleQuestion
+                          key={index}
+                          onClick={() => handleSendMessage(question)}
+                          className={`text-left h-auto whitespace-normal ${index === 3 ? 'hidden md:block' : ''}`}
+                        >
+                          {question}
+                        </ExampleQuestion>
+                      ))}
                     </div>
                   </div>
-                  <p className="text-center text-muted-foreground">
-                    {t.startPrompt}
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-2 gap-3">
-                    {t.exampleQuestions.map((question, index) => (
-                      <ExampleQuestion
-                        key={index}
-                        onClick={() => handleSendMessage(question)}
-                        className={`text-left h-auto whitespace-normal ${index === 3 ? 'hidden md:block' : ''}`}
-                      >
-                        {question}
-                      </ExampleQuestion>
+                ) : (
+                  <div className="w-full md:max-w-2xl lg:max-w-3xl p-4 md:pb-8 flex flex-col">
+                    {messages.map((message, index) => (
+                      <MessageBubble key={index} role={message.role} content={message.content} />
                     ))}
+                    {isThinking && <ThinkingAnimation thinkingText={t.thinking} />}
                   </div>
-                </div>
+                )}
+                <div ref={messagesEndRef} />
               </div>
-            ) : (
-              <div>
-                {messages.map((message, index) => (
-                  <MessageBubble key={index} role={message.role} content={message.content} />
-                ))}
-                {isThinking && <ThinkingAnimation thinkingText={t.thinking} />}
-              </div>
-            )}
-            <div ref={messagesEndRef} />
+            </div>
           </div>
         </div>
       </main>

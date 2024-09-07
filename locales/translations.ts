@@ -10,9 +10,9 @@ export const translations = {
       refreshChat: "Vernieuw gesprek",
       exampleQuestions: [
         "Wat is het nieuwe minimumloon voor een Medewerker Bediening I?",
-        "Hoe werken vakantiedagen bij een 0-uren contract?",
+        "Hoeveel loonsverhoging geef ik een chef die 3 jaar bij me werkt?",
         "Welke taken is een Bedrijfsleider II verantwoordelijk voor?",
-        "Hoeveel loonsverhoging geef ik van periodiek 3 naar 4 voor een chef?"
+        "Hoe werken vakantiedagen bij een 0-uren contract?"
       ]
     },
     en: {
@@ -25,10 +25,10 @@ export const translations = {
       poweredBy: "Powered by",
       refreshChat: "Refresh chat",
       exampleQuestions: [
-        "What is the new minimum wage for a Medewerker Bediening I?",
-        "Should I give vacation days to zero-hours contract employees?",
+        "What's the new minimum wage for a Medewerker Bediening I?",
+        "What's an appropriate raise for a chef who's been with me for 3 years?",
         "What tasks is a Bedrijfsleider II responsible for?",
-        "How much of a raise should I give a chef moving from pay scale 3 to 4?"
+        "Should I give vacation days to zero-hours contract employees?"
       ]
     }
   };
