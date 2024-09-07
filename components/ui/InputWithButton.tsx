@@ -1,6 +1,6 @@
 import React from 'react'
-import { Input, InputProps } from './Input'
-import { SendButton } from './SendButton'
+import { Input, InputProps } from '@/components/ui/Input'
+import { SendButton } from '@/components/ui/SendButton'
 
 interface InputWithButtonProps extends Omit<InputProps, 'button'> {
   onButtonClick: () => void;
