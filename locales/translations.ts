@@ -9,10 +9,10 @@ export const translations = {
       poweredBy: "Powered by",
       refreshChat: "Vernieuw gesprek",
       exampleQuestions: [
-        "Wat zijn de belangrijkste taken van een zelfstandig werkend kok?",
-        "Welke vaardigheden heeft een restaurantmanager nodig?",
-        "Wat is het verschil tussen een barista en een bartender?",
-        "Hoe ziet de carrièreladder in de horeca eruit?"
+        "Wat is het nieuwe minimumloon voor een Medewerker Bediening I?",
+        "Hoe werken vakantiedagen bij een 0-uren contract?",
+        "Welke taken is een Bedrijfsleider II verantwoordelijk voor?",
+        "Hoeveel loonsverhoging geef ik van periodiek 3 naar 4 voor een chef?"
       ]
     },
     en: {
@@ -25,10 +25,10 @@ export const translations = {
       poweredBy: "Powered by",
       refreshChat: "Refresh chat",
       exampleQuestions: [
-        "What are the main tasks of an independent working chef?",
-        "What skills does a restaurant manager need?",
-        "What's the difference between a barista and a bartender?",
-        "What does the career ladder in hospitality look like?"
+        "What is the new minimum wage for a Medewerker Bediening I?",
+        "Should I give vacation days to zero-hours contract employees?",
+        "What tasks is a Bedrijfsleider II responsible for?",
+        "How much of a raise should I give a chef moving from pay scale 3 to 4?"
       ]
     }
   };
