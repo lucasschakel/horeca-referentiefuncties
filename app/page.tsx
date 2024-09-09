@@ -125,20 +125,28 @@ function HorecaReferentiefunctiesChat() {
         onRefresh={handleRefresh}
         showRefresh={messages.length > 0}
       />
-      {messages.length === 0 ? (
-        <main className="mx-auto flex w-full max-w-2xl flex-1 items-center justify-center px-3 md:px-0">
-          <EmptyState t={t} onSendMessage={handleSendMessage} />
-        </main>
-      ) : (
-        <main className="mx-auto h-[calc(100vh-48px)] w-full max-w-2xl flex-1 overflow-y-auto pt-12 md:pt-14">
-          <ChatMessages
-            messages={messages}
-            isThinking={isThinking}
-            t={t}
-            messagesEndRef={messagesEndRef}
-          />
-        </main>
-      )}
+      <div className="flex-1 overflow-hidden pb-[88px] pt-[48px]">
+        {' '}
+        {/* Adjust these values based on your header and footer heights */}
+        {messages.length === 0 ? (
+          <main className="h-full overflow-y-auto">
+            <div className="mx-auto flex h-full w-full max-w-2xl items-center justify-center px-3 md:px-0">
+              <EmptyState t={t} onSendMessage={handleSendMessage} />
+            </div>
+          </main>
+        ) : (
+          <main className="h-full overflow-y-auto">
+            <div className="mx-auto w-full max-w-2xl px-3 md:px-0">
+              <ChatMessages
+                messages={messages}
+                isThinking={isThinking}
+                t={t}
+                messagesEndRef={messagesEndRef}
+              />
+            </div>
+          </main>
+        )}
+      </div>
       <Footer
         inputRef={inputRef}
         inputMessage={inputMessage}
