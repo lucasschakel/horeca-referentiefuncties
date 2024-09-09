@@ -125,27 +125,21 @@ function HorecaReferentiefunctiesChat() {
         onRefresh={handleRefresh}
         showRefresh={messages.length > 0}
       />
-      <div className="flex-1 overflow-hidden pb-[88px] pt-[48px]">
-        {' '}
-        {/* Adjust these values based on your header and footer heights */}
-        {messages.length === 0 ? (
-          <main className="h-full overflow-y-auto">
-            <div className="mx-auto flex h-full w-full max-w-2xl items-center justify-center px-3 md:px-0">
-              <EmptyState t={t} onSendMessage={handleSendMessage} />
-            </div>
-          </main>
-        ) : (
-          <main className="h-full overflow-y-auto">
-            <div className="mx-auto w-full max-w-2xl px-3 md:px-0">
-              <ChatMessages
-                messages={messages}
-                isThinking={isThinking}
-                t={t}
-                messagesEndRef={messagesEndRef}
-              />
-            </div>
-          </main>
-        )}
+      <div
+        className={`mx-auto w-full max-w-2xl px-3 pb-[56px] md:px-0 ${messages.length === 0 ? 'my-auto' : 'pb-32 pt-14'}`}
+      >
+        <main>
+          {messages.length === 0 ? (
+            <EmptyState t={t} onSendMessage={handleSendMessage} />
+          ) : (
+            <ChatMessages
+              messages={messages}
+              isThinking={isThinking}
+              t={t}
+              messagesEndRef={messagesEndRef}
+            />
+          )}
+        </main>
       </div>
       <Footer
         inputRef={inputRef}
@@ -169,7 +163,7 @@ const ChatMessages: React.FC<{
   t: Translations
   messagesEndRef: React.RefObject<HTMLDivElement>
 }> = ({ messages, isThinking, t, messagesEndRef }) => (
-  <div className="pb-8">
+  <div className="">
     {messages.map((message, index) => (
       <article key={index}>
         <ChatBubble role={message.role} content={message.content} />

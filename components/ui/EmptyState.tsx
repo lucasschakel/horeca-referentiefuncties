@@ -19,7 +19,7 @@ interface EmptyStateProps {
 
 const EmptyState: React.FC<EmptyStateProps> = ({ t, onSendMessage }) => {
   return (
-    <div className="mx-auto items-center justify-center">
+    <>
       <div className="mb-6 flex flex-col items-center">
         <div className="relative mb-4 h-[40px] w-[40px]">
           <Image
@@ -33,7 +33,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ t, onSendMessage }) => {
           {t.startPrompt}
         </p>
       </div>
-      <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3 md:grid-cols-2 md:gap-4">
+      <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3 md:grid-cols-2">
         {t.exampleQuestions.map((question: string, index: number) => (
           <ExampleQuestion
             key={index}
@@ -46,7 +46,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ t, onSendMessage }) => {
           </ExampleQuestion>
         ))}
       </div>
-    </div>
+    </>
   )
 }
 

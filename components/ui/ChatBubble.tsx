@@ -16,7 +16,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
 
   return (
     <div
-      className={`flex w-full justify-start px-3 py-[18px] md:px-4 ${
+      className={`flex w-full justify-start py-[18px] ${
         isUser ? 'flex-row-reverse' : 'flex-row'
       } items-start`}
     >
@@ -37,7 +37,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
         }`}
       >
         {isThinking ? (
-          <span className="inline-flex items-center">
+          <span>
             {thinkingText}
             <span className="pl-0.5">
               <span className="thinking-dot">.</span>
