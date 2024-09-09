@@ -7,9 +7,7 @@ const exampleQuestionVariants = cva(
   {
     variants: {
       size: {
-        default: 'px-4 py-2',
-        sm: 'px-3 py-2',
-        lg: 'px-5 py-3',
+        default: 'px-4 py-2 md:py-3',
       },
     },
     defaultVariants: {

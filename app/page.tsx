@@ -1,7 +1,6 @@
 'use client'
 
-import '@/app/globals.css'
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { ToastProvider, useToast } from '@/components/ToastContext'
 import { ToastContainer } from '@/components/ui/ToastContainer'
 import { callOpenAIAssistant } from '@/lib/openAi'
@@ -18,15 +17,26 @@ interface Message {
   content: string
 }
 
+interface Translations {
+  title: string
+  startPrompt: string
+  inputPlaceholderInitial: string
+  inputPlaceholderOngoing: string
+  poweredBy: string
+  thinking: string
+  exampleQuestions: string[]
+}
+
 function HorecaReferentiefunctiesChat() {
   const [messages, setMessages] = useState<Message[]>([])
   const [inputMessage, setInputMessage] = useState('')
   const [isThinking, setIsThinking] = useState(false)
+  const [language, setLanguage] = useState('nl')
+  const [cancelToken, setCancelToken] = useState<AbortController | null>(null)
+
   const { toast } = useToast()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const [language, setLanguage] = useState('nl')
-  const [cancelToken, setCancelToken] = useState<AbortController | null>(null)
 
   useEffect(() => {
     const link = document.createElement('link')
@@ -40,15 +50,12 @@ function HorecaReferentiefunctiesChat() {
   }, [])
 
   useEffect(() => {
-    const isMobileDevice = () => {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    if (
+      !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
       )
-    }
-
-    // Focus the input only if it's not a mobile device
-    if (!isMobileDevice() && inputRef.current) {
-      inputRef.current.focus()
+    ) {
+      inputRef.current?.focus()
     }
   }, [])
 
@@ -57,7 +64,6 @@ function HorecaReferentiefunctiesChat() {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
     }
     scrollToBottom()
-    // Add a small delay to ensure scrolling after the DOM has updated
     const timeoutId = setTimeout(scrollToBottom, 100)
     return () => clearTimeout(timeoutId)
   }, [messages, isThinking])
@@ -74,9 +80,7 @@ function HorecaReferentiefunctiesChat() {
   }
 
   const handleRefresh = () => {
-    if (cancelToken) {
-      cancelToken.abort()
-    }
+    cancelToken?.abort()
     setMessages([])
     setIsThinking(false)
     setInputMessage('')
@@ -85,8 +89,7 @@ function HorecaReferentiefunctiesChat() {
   const handleSendMessage = async (message: string) => {
     if (!message.trim()) return
 
-    const userMessage: Message = { role: 'user', content: message }
-    setMessages((prev) => [...prev, userMessage])
+    setMessages((prev) => [...prev, { role: 'user', content: message }])
     setInputMessage('')
     setIsThinking(true)
 
@@ -98,15 +101,9 @@ function HorecaReferentiefunctiesChat() {
         message,
         abortController.signal
       )
-      const assistantMessage: Message = {
-        role: 'assistant',
-        content: response,
-      }
-      setMessages((prev) => [...prev, assistantMessage])
-    } catch (error: unknown) {
-      if (error instanceof Error && error.name === 'AbortError') {
-        // Request was aborted, do nothing
-      } else {
+      setMessages((prev) => [...prev, { role: 'assistant', content: response }])
+    } catch (error) {
+      if (error instanceof Error && error.name !== 'AbortError') {
         toast({
           title: 'Error',
           description: 'Failed to get a response.',
@@ -131,56 +128,18 @@ function HorecaReferentiefunctiesChat() {
         showRefresh={messages.length > 0}
       />
 
-      <main className="relative flex h-full w-full flex-1 flex-col overflow-hidden transition-colors">
-        <div className="relative flex h-full max-w-full flex-1 flex-col overflow-hidden">
-          <div className="flex-1 overflow-hidden">
-            <div className="h-full overflow-y-auto">
-              <div className="flex h-full flex-col items-center justify-start text-sm">
-                {messages.length === 0 ? (
-                  <div className="flex h-full w-full flex-col items-center justify-center px-4 py-8 md:max-w-2xl">
-                    <div className="mb-4 flex justify-center">
-                      <div className="relative h-[40px] w-[40px]">
-                        <Image
-                          src="/Soigne-e.svg"
-                          alt="Soigne Logo"
-                          layout="fill"
-                          objectFit="contain"
-                        />
-                      </div>
-                    </div>
-                    <p className="mb-6 text-center text-muted-foreground">
-                      {t.startPrompt}
-                    </p>
-                    <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3 md:grid-cols-2">
-                      {t.exampleQuestions.map((question, index) => (
-                        <ExampleQuestion
-                          key={index}
-                          onClick={() => handleSendMessage(question)}
-                          className={`h-auto whitespace-normal text-left ${index === 3 ? 'hidden md:block' : ''}`}
-                        >
-                          {question}
-                        </ExampleQuestion>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex w-full flex-col p-3 pb-6 md:max-w-2xl md:p-4 md:pb-8">
-                    {messages.map((message, index) => (
-                      <MessageBubble
-                        key={index}
-                        role={message.role}
-                        content={message.content}
-                      />
-                    ))}
-                    {isThinking && (
-                      <ThinkingAnimation thinkingText={t.thinking} />
-                    )}
-                  </div>
-                )}
-                <div ref={messagesEndRef} />
-              </div>
-            </div>
-          </div>
+      <main className="flex-1 overflow-hidden">
+        <div className="h-full overflow-y-auto">
+          {messages.length === 0 ? (
+            <EmptyState t={t} onSendMessage={handleSendMessage} />
+          ) : (
+            <ChatMessages
+              messages={messages}
+              isThinking={isThinking}
+              t={t}
+              messagesEndRef={messagesEndRef}
+            />
+          )}
         </div>
       </main>
 
@@ -199,6 +158,61 @@ function HorecaReferentiefunctiesChat() {
     </div>
   )
 }
+
+const EmptyState: React.FC<{
+  t: Translations
+  onSendMessage: (message: string) => void
+}> = ({ t, onSendMessage }) => (
+  <div className="flex h-full items-center justify-center">
+    <div className="flex max-w-2xl flex-col items-center justify-center px-4 py-8">
+      <div className="relative mb-4 h-[40px] w-[40px]">
+        <Image
+          src="/Soigne-e.svg"
+          alt="Soigne Logo"
+          layout="fill"
+          objectFit="contain"
+        />
+      </div>
+      <p className="mb-6 text-center text-[15px] leading-6 text-muted-foreground md:text-[16px]">
+        {t.startPrompt}
+      </p>
+      <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3 md:grid-cols-2 md:gap-4">
+        {t.exampleQuestions.map((question: string, index: number) => (
+          <ExampleQuestion
+            key={index}
+            onClick={() => onSendMessage(question)}
+            className={`h-auto whitespace-normal text-left ${
+              index === 3 ? 'hidden md:block' : ''
+            }`}
+          >
+            {question}
+          </ExampleQuestion>
+        ))}
+      </div>
+    </div>
+  </div>
+)
+
+const ChatMessages: React.FC<{
+  messages: Message[]
+  isThinking: boolean
+  t: Translations
+  messagesEndRef: React.RefObject<HTMLDivElement>
+}> = ({ messages, isThinking, t, messagesEndRef }) => (
+  <div className="flex min-h-full w-full items-start justify-center">
+    <div className="flex w-full max-w-2xl flex-col p-3 pb-6 md:p-4 md:pb-8">
+      {messages.map((message, index) => (
+        <MessageBubble
+          key={index}
+          role={message.role}
+          content={message.content}
+        />
+      ))}
+      {isThinking && <ThinkingAnimation thinkingText={t.thinking} />}
+      <div ref={messagesEndRef} />
+    </div>
+  </div>
+)
 
 export default function Page() {
   return (
