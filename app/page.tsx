@@ -4,10 +4,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useToast } from '@/components/ToastContext'
 import { callOpenAIAssistant } from '@/lib/openAi'
 import { translations } from '@/locales/translations'
-import ChatBubble from '@/components/ui/ChatBubble'
+import ChatLayout from '@/components/ui/ChatLayout'
 import EmptyState from '@/components/ui/EmptyState'
-import Footer from '@/components/ui/Footer'
-import Header from '@/components/ui/Header'
+import ChatBubble from '@/components/ui/ChatBubble'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -24,7 +23,7 @@ interface Translations {
   exampleQuestions: string[]
 }
 
-function HorecaReferentiefunctiesChat() {
+export default function Home() {
   const [messages, setMessages] = useState<Message[]>([])
   const [inputMessage, setInputMessage] = useState('')
   const [isThinking, setIsThinking] = useState(false)
@@ -116,47 +115,34 @@ function HorecaReferentiefunctiesChat() {
   const t = translations[language as keyof typeof translations]
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <Header
-        title={t.title}
-        language={language}
-        onLanguageChange={handleLanguageChange}
-        onRefresh={handleRefresh}
-        showRefresh={messages.length > 0}
-      />
-      <div className="flex flex-grow flex-col overflow-y-auto">
-        <div
-          className={`mx-auto w-full max-w-2xl flex-grow px-3 md:px-0 ${
-            messages.length === 0 ? 'flex items-center' : 'py-4'
-          }`}
-        >
-          <main className="w-full">
-            {messages.length === 0 ? (
-              <EmptyState t={t} onSendMessage={handleSendMessage} />
-            ) : (
-              <ChatMessages
-                messages={messages}
-                isThinking={isThinking}
-                t={t}
-                messagesEndRef={messagesEndRef}
-              />
-            )}
-          </main>
-        </div>
-      </div>
-      <Footer
-        inputRef={inputRef}
-        inputMessage={inputMessage}
-        onInputChange={(e) => setInputMessage(e.target.value)}
-        onSendMessage={() => handleSendMessage(inputMessage)}
-        placeholderText={
-          messages.length === 0
-            ? t.inputPlaceholderInitial
-            : t.inputPlaceholderOngoing
-        }
-        poweredByText={t.poweredBy}
-      />
-    </div>
+    <ChatLayout
+      title={t.title}
+      language={language}
+      onLanguageChange={handleLanguageChange}
+      onRefresh={handleRefresh}
+      showRefresh={messages.length > 0}
+      inputRef={inputRef}
+      inputMessage={inputMessage}
+      onInputChange={(e) => setInputMessage(e.target.value)}
+      onSendMessage={() => handleSendMessage(inputMessage)}
+      placeholderText={
+        messages.length === 0
+          ? t.inputPlaceholderInitial
+          : t.inputPlaceholderOngoing
+      }
+      poweredByText={t.poweredBy}
+    >
+      {messages.length === 0 ? (
+        <EmptyState t={t} onSendMessage={handleSendMessage} />
+      ) : (
+        <ChatMessages
+          messages={messages}
+          isThinking={isThinking}
+          t={t}
+          messagesEndRef={messagesEndRef}
+        />
+      )}
+    </ChatLayout>
   )
 }
 
@@ -166,7 +152,7 @@ const ChatMessages: React.FC<{
   t: Translations
   messagesEndRef: React.RefObject<HTMLDivElement>
 }> = ({ messages, isThinking, t, messagesEndRef }) => (
-  <>
+  <div>
     {messages.map((message, index) => (
       <ChatBubble key={index} role={message.role} content={message.content} />
     ))}
@@ -174,9 +160,5 @@ const ChatMessages: React.FC<{
       <ChatBubble role="thinking" content="" thinkingText={t.thinking} />
     )}
     <div ref={messagesEndRef} />
-  </>
+  </div>
 )
-
-export default function Page() {
-  return <HorecaReferentiefunctiesChat />
-}

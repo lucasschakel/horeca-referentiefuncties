@@ -17,14 +17,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover"
         />
       </head>
-      <body className={`${inter.className} flex min-h-screen flex-col`}>
+      <body className={`${inter.className} flex h-full flex-col`}>
         <Providers>{children}</Providers>
       </body>
     </html>
