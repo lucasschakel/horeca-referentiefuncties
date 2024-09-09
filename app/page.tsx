@@ -1,8 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { ToastProvider, useToast } from '@/components/ToastContext'
-import { ToastContainer } from '@/components/ui/ToastContainer'
+import { useToast } from '@/components/ToastContext'
 import { callOpenAIAssistant } from '@/lib/openAi'
 import { translations } from '@/locales/translations'
 import ChatBubble from '@/components/ui/ChatBubble'
@@ -179,10 +178,5 @@ const ChatMessages: React.FC<{
 )
 
 export default function Page() {
-  return (
-    <ToastProvider>
-      <ToastContainer />
-      <HorecaReferentiefunctiesChat />
-    </ToastProvider>
-  )
+  return <HorecaReferentiefunctiesChat />
 }
