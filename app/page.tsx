@@ -126,7 +126,7 @@ function HorecaReferentiefunctiesChat() {
         showRefresh={messages.length > 0}
       />
       <div
-        className={`mx-auto w-full max-w-2xl px-3 pb-[56px] md:px-0 ${messages.length === 0 ? 'my-auto' : 'pb-32 pt-14'}`}
+        className={`mx-auto w-full max-w-2xl px-3 pb-[56px] md:px-0 ${messages.length === 0 ? 'my-auto' : ''}`}
       >
         <main>
           {messages.length === 0 ? (
@@ -163,16 +163,12 @@ const ChatMessages: React.FC<{
   t: Translations
   messagesEndRef: React.RefObject<HTMLDivElement>
 }> = ({ messages, isThinking, t, messagesEndRef }) => (
-  <div className="">
+  <div className="pb-16 pt-14 md:pb-20">
     {messages.map((message, index) => (
-      <article key={index}>
-        <ChatBubble role={message.role} content={message.content} />
-      </article>
+      <ChatBubble key={index} role={message.role} content={message.content} />
     ))}
     {isThinking && (
-      <article>
-        <ChatBubble role="thinking" content="" thinkingText={t.thinking} />
-      </article>
+      <ChatBubble role="thinking" content="" thinkingText={t.thinking} />
     )}
     <div ref={messagesEndRef} />
   </div>

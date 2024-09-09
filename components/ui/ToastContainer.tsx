@@ -40,7 +40,7 @@ export function ToastContainer() {
           }
         }
         .slide-up {
-          animation: slideUp 0.2s ease-out;
+          animation: slideUp 0.15s ease-out;
         }
       `}</style>
       <div className="fixed bottom-0 left-0 right-0 z-50 flex items-end justify-center p-4">
