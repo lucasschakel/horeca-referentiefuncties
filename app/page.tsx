@@ -5,9 +5,8 @@ import { ToastProvider, useToast } from '@/components/ToastContext'
 import { ToastContainer } from '@/components/ui/ToastContainer'
 import { callOpenAIAssistant } from '@/lib/openAi'
 import { translations } from '@/locales/translations'
-import MessageBubble from '@/components/ui/MessageBubble'
+import ChatBubble from '@/components/ui/ChatBubble'
 import EmptyState from '@/components/ui/EmptyState'
-import ThinkingAnimation from '@/components/ui/ThinkingAnimation'
 import Footer from '@/components/ui/Footer'
 import Header from '@/components/ui/Header'
 
@@ -118,7 +117,7 @@ function HorecaReferentiefunctiesChat() {
   const t = translations[language as keyof typeof translations]
 
   return (
-    <div className="flex h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col">
       <Header
         title={t.title}
         language={language}
@@ -126,22 +125,20 @@ function HorecaReferentiefunctiesChat() {
         onRefresh={handleRefresh}
         showRefresh={messages.length > 0}
       />
-
-      <main className="flex-1 overflow-hidden">
-        <div className="h-full overflow-y-auto">
-          {messages.length === 0 ? (
-            <EmptyState t={t} onSendMessage={handleSendMessage} />
-          ) : (
-            <ChatMessages
-              messages={messages}
-              isThinking={isThinking}
-              t={t}
-              messagesEndRef={messagesEndRef}
-            />
-          )}
-        </div>
-      </main>
-
+      {messages.length === 0 ? (
+        <main className="mx-auto flex w-full max-w-2xl flex-1 items-center justify-center px-3 md:px-0">
+          <EmptyState t={t} onSendMessage={handleSendMessage} />
+        </main>
+      ) : (
+        <main className="mx-auto h-[calc(100vh-48px)] w-full max-w-2xl flex-1 overflow-y-auto pt-12 md:pt-14">
+          <ChatMessages
+            messages={messages}
+            isThinking={isThinking}
+            t={t}
+            messagesEndRef={messagesEndRef}
+          />
+        </main>
+      )}
       <Footer
         inputRef={inputRef}
         inputMessage={inputMessage}
@@ -164,18 +161,18 @@ const ChatMessages: React.FC<{
   t: Translations
   messagesEndRef: React.RefObject<HTMLDivElement>
 }> = ({ messages, isThinking, t, messagesEndRef }) => (
-  <div className="flex min-h-full w-full items-start justify-center">
-    <div className="flex w-full max-w-2xl flex-col p-3 pb-6 md:p-4 md:pb-8">
-      {messages.map((message, index) => (
-        <MessageBubble
-          key={index}
-          role={message.role}
-          content={message.content}
-        />
-      ))}
-      {isThinking && <ThinkingAnimation thinkingText={t.thinking} />}
-      <div ref={messagesEndRef} />
-    </div>
+  <div className="pb-8">
+    {messages.map((message, index) => (
+      <article key={index}>
+        <ChatBubble role={message.role} content={message.content} />
+      </article>
+    ))}
+    {isThinking && (
+      <article>
+        <ChatBubble role="thinking" content="" thinkingText={t.thinking} />
+      </article>
+    )}
+    <div ref={messagesEndRef} />
   </div>
 )
 

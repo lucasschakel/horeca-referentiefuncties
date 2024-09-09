@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({
   showRefresh,
 }) => {
   return (
-    <header className="sticky top-0 z-10 bg-white py-1">
+    <header className="fixed left-0 right-0 bg-white py-1">
       <div className="mx-auto flex items-center justify-between pl-4 pr-2">
         <h1
           className="text-lg font-semibold md:text-2xl"
