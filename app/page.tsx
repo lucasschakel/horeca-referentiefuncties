@@ -5,12 +5,11 @@ import { ToastProvider, useToast } from '@/components/ToastContext'
 import { ToastContainer } from '@/components/ui/ToastContainer'
 import { callOpenAIAssistant } from '@/lib/openAi'
 import { translations } from '@/locales/translations'
-import { ExampleQuestion } from '@/components/ui/ExampleQuestion'
 import MessageBubble from '@/components/ui/MessageBubble'
+import EmptyState from '@/components/ui/EmptyState'
 import ThinkingAnimation from '@/components/ui/ThinkingAnimation'
 import Footer from '@/components/ui/Footer'
 import Header from '@/components/ui/Header'
-import Image from 'next/image'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -158,40 +157,6 @@ function HorecaReferentiefunctiesChat() {
     </div>
   )
 }
-
-const EmptyState: React.FC<{
-  t: Translations
-  onSendMessage: (message: string) => void
-}> = ({ t, onSendMessage }) => (
-  <div className="flex h-full items-center justify-center">
-    <div className="flex max-w-2xl flex-col items-center justify-center px-4 py-8">
-      <div className="relative mb-4 h-[40px] w-[40px]">
-        <Image
-          src="/Soigne-e.svg"
-          alt="Soigne Logo"
-          layout="fill"
-          objectFit="contain"
-        />
-      </div>
-      <p className="mb-6 text-center text-[15px] leading-6 text-muted-foreground md:text-[16px]">
-        {t.startPrompt}
-      </p>
-      <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3 md:grid-cols-2 md:gap-4">
-        {t.exampleQuestions.map((question: string, index: number) => (
-          <ExampleQuestion
-            key={index}
-            onClick={() => onSendMessage(question)}
-            className={`h-auto whitespace-normal text-left ${
-              index === 3 ? 'hidden md:block' : ''
-            }`}
-          >
-            {question}
-          </ExampleQuestion>
-        ))}
-      </div>
-    </div>
-  </div>
-)
 
 const ChatMessages: React.FC<{
   messages: Message[]

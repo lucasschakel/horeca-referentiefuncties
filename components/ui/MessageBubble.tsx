@@ -9,7 +9,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ role, content }) => {
       className={`flex ${role === 'user' ? 'justify-end' : 'justify-start'} mb-2`}
     >
       <div
-        className={`flex items-start ${role === 'user' ? 'max-w-[70%] flex-row-reverse py-6' : ''}`}
+        className={`flex items-start ${role === 'user' ? 'max-w-[70%] flex-row-reverse py-4 md:py-6' : ''}`}
       >
         {role === 'assistant' && (
           <div className="h-7 w-7 flex-shrink-0 overflow-hidden rounded-full">
