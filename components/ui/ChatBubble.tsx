@@ -32,7 +32,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
           isUser
             ? 'max-w-[70%] rounded-3xl bg-primary px-5 py-2.5 text-primary-foreground'
             : isThinking
-              ? 'animate-pulse rounded-2xl'
+              ? 'animate-pulse pl-1'
               : 'max-w-[95%] pl-1'
         }`}
       >

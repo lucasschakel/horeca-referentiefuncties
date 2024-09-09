@@ -19,7 +19,7 @@ interface EmptyStateProps {
 
 const EmptyState: React.FC<EmptyStateProps> = ({ t, onSendMessage }) => {
   return (
-    <div className="pb-[40px]">
+    <>
       <div className="mb-6 flex flex-col items-center">
         <div className="relative mb-4 h-[40px] w-[40px]">
           <Image
@@ -46,7 +46,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ t, onSendMessage }) => {
           </ExampleQuestion>
         ))}
       </div>
-    </div>
+    </>
   )
 }
 

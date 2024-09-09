@@ -113,6 +113,7 @@ export default function Home() {
   }
 
   const t = translations[language as keyof typeof translations]
+  const isEmpty = messages.length === 0
 
   return (
     <ChatLayout
@@ -120,19 +121,18 @@ export default function Home() {
       language={language}
       onLanguageChange={handleLanguageChange}
       onRefresh={handleRefresh}
-      showRefresh={messages.length > 0}
+      showRefresh={!isEmpty}
       inputRef={inputRef}
       inputMessage={inputMessage}
       onInputChange={(e) => setInputMessage(e.target.value)}
       onSendMessage={() => handleSendMessage(inputMessage)}
       placeholderText={
-        messages.length === 0
-          ? t.inputPlaceholderInitial
-          : t.inputPlaceholderOngoing
+        isEmpty ? t.inputPlaceholderInitial : t.inputPlaceholderOngoing
       }
       poweredByText={t.poweredBy}
+      isEmpty={isEmpty}
     >
-      {messages.length === 0 ? (
+      {isEmpty ? (
         <EmptyState t={t} onSendMessage={handleSendMessage} />
       ) : (
         <ChatMessages

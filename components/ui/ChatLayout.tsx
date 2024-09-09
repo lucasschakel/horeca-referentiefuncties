@@ -17,6 +17,7 @@ interface ChatLayoutProps {
   onSendMessage: () => void
   placeholderText: string
   poweredByText: string
+  isEmpty: boolean
 }
 
 const ChatLayout: React.FC<ChatLayoutProps> = ({
@@ -32,6 +33,7 @@ const ChatLayout: React.FC<ChatLayoutProps> = ({
   onSendMessage,
   placeholderText,
   poweredByText,
+  isEmpty,
 }) => {
   return (
     <>
@@ -42,8 +44,12 @@ const ChatLayout: React.FC<ChatLayoutProps> = ({
         onRefresh={onRefresh}
         showRefresh={showRefresh}
       />
-      <main className="flex-1 overflow-y-auto">
-        <div className="mx-auto w-full max-w-2xl px-3 py-4 md:px-0">
+      <main
+        className={`flex-1 overflow-y-auto ${isEmpty ? 'flex items-center' : ''}`}
+      >
+        <div
+          className={`mx-auto w-full max-w-2xl px-3 ${isEmpty ? 'py-0 pb-[40px]' : 'py-4'} md:px-0`}
+        >
           {children}
         </div>
       </main>
