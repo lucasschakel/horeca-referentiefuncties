@@ -19,7 +19,7 @@ const Footer: React.FC<FooterProps> = ({
   poweredByText,
 }) => {
   return (
-    <footer className="fixed bottom-0 left-0 right-0 h-[88px] bg-white pb-3">
+    <footer className="sticky bottom-0 z-10 bg-white pb-3">
       <div className="mx-auto flex max-w-2xl flex-col space-y-3 px-3 md:px-0">
         <InputWithButton
           ref={inputRef}
