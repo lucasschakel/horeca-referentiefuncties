@@ -126,7 +126,7 @@ function HorecaReferentiefunctiesChat() {
         showRefresh={messages.length > 0}
       />
       <div
-        className={`mx-auto w-full max-w-2xl px-3 pb-[56px] md:px-0 ${messages.length === 0 ? 'my-auto' : ''}`}
+        className={`mx-auto w-full max-w-2xl px-3 md:px-0 ${messages.length === 0 ? 'my-auto pb-[56px]' : ''}`}
       >
         <main>
           {messages.length === 0 ? (
